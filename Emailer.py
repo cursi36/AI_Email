@@ -80,9 +80,15 @@ SCOPES = ["https://www.googleapis.com/auth/gmail.readonly",
 
 
 class Emailer():
-    def __init__(self,token_file=os.path.join(dir_path,"../private/token.json"),
+    def __init__(self,token_file=os.path.join(dir_path,"./private/token.json"),
                  client_secret_filename="") -> object:
-        os.environ['GMAIL_CREDENTIALS_JSON'] = os.path.join(dir_path,f"../private/{client_secret_filename}")
+
+        try:
+            os.mkdir(os.path.join(dir_path,"./private/"))
+        except:
+            pass
+
+        os.environ['GMAIL_CREDENTIALS_JSON'] = client_secret_filename
 
         creds = None
         # The file token.json stores the user's access and refresh tokens, and is
@@ -312,10 +318,9 @@ class myApp():
         self.chatter = None
 
     def init_emailer(self,history, filename):
-        self.emailer = Emailer(token_file=os.path.join(dir_path,"../private/token.json"),
-                 client_secret_filename=filename)
+        self.emailer = Emailer(client_secret_filename=filename.name)
 
-        history = history + [(filename,"Emailer initialized")]
+        history = history + [(filename.name,"Emailer initialized")]
 
         return history
 
